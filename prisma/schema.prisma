@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Clientes {
+  Id      Int       @id(map: "PK__Clientes__3214EC071EF815D0") @default(autoincrement())
+  Nome    String    @db.VarChar(80)
+  Login   String    @db.VarChar(50)
+  Senha   String    @db.VarChar(50)
+  Pedidos Pedidos[]
+}
+
+model Pedidos {
+  Id              Int              @id(map: "PK__Pedidos__3214EC07A364EF57") @default(autoincrement())
+  Valor           Float            @db.Money
+  Data            DateTime         @db.Date
+  MetPag          String           @db.VarChar(30)
+  ClienteId       Int
+  Clientes        Clientes         @relation(fields: [ClienteId], references: [Id], onUpdate: NoAction, map: "FK_ClienteId")
+  ProdutosPedidos ProdutosPedidos?
+}
+
+model Produtos {
+  Id              Int               @id(map: "PK__Produtos__3214EC07822C96C8") @default(autoincrement())
+  Nome            String            @db.VarChar(50)
+  Preco           Float             @db.Money
+  Descricao       String?           @db.Text
+  URLImagem       String?           @db.Text
+  ProdutosPedidos ProdutosPedidos[]
+}
+
+model ProdutosPedidos {
+  PedId      Int      @id(map: "PK__Produtos__50CF4A45C3EB763B")
+  ProdId     Int
+  Quantidade Int
+  Pedidos    Pedidos  @relation(fields: [PedId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK__ProdutosP__PedId__6383C8BA")
+  Produtos   Produtos @relation(fields: [ProdId], references: [Id], onUpdate: NoAction, map: "FK_ProdId")
+}
