@@ -2,6 +2,6 @@ export class Produto {
   public Id?: number;
   public Nome?: String;
   public Preco?: number;
-  public Descricao?: String;
-  public URLImagem?: String;
+  public Descricao?: String | null;
+  public URLImagem?: String | null;
 }
