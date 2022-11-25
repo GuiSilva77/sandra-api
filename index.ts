@@ -47,5 +47,5 @@ const outputFile = "./swagger.json";
 const endpointsFiles = ["./src/server.ts"];
 
 swaggerAutogen()(outputFile, endpointsFiles, docs).then(() => {
-  import("./server");
+  import("./src/server");
 });
