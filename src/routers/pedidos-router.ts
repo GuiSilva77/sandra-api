@@ -174,4 +174,85 @@ pedidosRouter.post("/adicionar", async (req, res) => {
   });
 });
 
+// PUT /pedidos/:id
+pedidosRouter.put("/:id", async (req, res) => {
+  /*
+    #swagger.tags = ['Pedidos']
+    #swagger.description = 'Endpoint para atualizar um pedido.'
+    #swagger.security = [{
+            "bearerAuth": []
+    }]
+    #swagger.parameters['token'] = {
+            in: 'header',
+            description: 'Token de autenticação',
+            type: 'string'
+    }
+    #swagger.parameters['id'] = {
+            in: 'path',
+            description: 'Id do pedido',
+            type: 'number'
+    }
+    #swagger.parameters['pedido'] = {
+            in: 'body',
+            description: 'Pedido',
+            schema: {
+              Valor: "number",
+              MetPag: "string",
+              ProdutosPedidos: "Produto[]",
+            }
+    }
+    #swagger.responses[200] = {
+        description: 'Pedido atualizado',
+        schema: {
+          Id: "number",
+          Valor: "number",
+          Data: "Date",
+          MetPag: "string",
+          ClienteId: "number",
+          ProdutosPedidos: "Produto[]",
+        }
+    }
+    #swagger.responses[404] = {
+        description: 'Pedido não encontrado'
+    }
+    #swagger.responses[500] = {
+        description: 'Erro ao atualizar pedido'
+    }
+  */
+  checarAutorizacao(req, res, async () => {
+    const { id } = req.params;
+    const { Valor, MetPag, ProdutosPedidos } = req.body;
+
+    const pedido: Pedidos | null = await db.pedidos.update({
+      where: {
+        Id: Number(id),
+      },
+      data: {
+        Valor,
+        MetPag,
+      },
+    });
+
+    const produtosPedidos = await db.produtosPedidos.deleteMany({
+      where: {
+        PedId: Number(id),
+      },
+    });
+
+    const produtosPedidosNovos = await db.produtosPedidos.createMany({
+      data: ProdutosPedidos.map((produtoPedido: ProdutosPedidos) => ({
+        ProdId: produtoPedido.ProdId,
+        PedId: Number(id),
+        Quantidade: produtoPedido.Quantidade,
+      })),
+    });
+
+    if (pedido && produtosPedidos && produtosPedidosNovos) {
+      res.status(200).json(pedido);
+    } else {
+      res.status(500).json({ message: "Erro ao atualizar pedido" });
+    }
+  });
+});
+
 export default pedidosRouter;
