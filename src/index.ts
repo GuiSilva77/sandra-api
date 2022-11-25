@@ -1,22 +1,51 @@
-import Express from "express";
-import Jwt from "jsonwebtoken";
-import clientesRouter from "./routers/clientes-router";
-import pedidosRouter from "./routers/pedidos-router";
-import produtosRouter from "./routers/produtos-router";
+import swaggerAutogen from "swagger-autogen";
 
-const app = Express();
-const PORT = process.env.PORT;
+const docs = {
+  info: {
+    version: "1.0.0",
+    title: "API Cantina da Sandra",
+    description: "API para o sistema de pedidos da cantina da Sandra",
+  },
+  host: "localhost:4000",
+  basePath: "/",
+  schemes: ["http"],
+  definitions: {
+    Cliente: {
+      Id: "number",
+      Nome: "string",
+      Login: "string",
+      Senha: "string",
+      Ativado: "boolean",
+      CPF: "string",
+    },
+    Produto: {
+      Id: "number",
+      Nome: "string",
+      Descricao: "string",
+      Preco: "number",
+      URLImagem: "string",
+    },
+    Pedido: {
+      Id: "number",
+      Valor: "number",
+      Data: "Date",
+      MetPag: "string",
+      ClienteId: "number",
+      ProdutosPedidos: "Produto[]",
+    },
+  },
+  securityDefinitions: {
+    bearerAuth: {
+      type: "apiKey",
+      scheme: "bearer",
+      bearerFormat: "JWT",
+    },
+  },
+};
 
-app.use(Express.json());
+const outputFile = "./swagger.json";
+const endpointsFiles = ["./src/server.ts"];
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.use("/clientes", clientesRouter);
-app.use("/pedidos", pedidosRouter);
-app.use("/produtos", produtosRouter);
-
-app.listen(PORT, () => {
-  console.log(`Server started at http://localhost:${PORT}`);
+swaggerAutogen()(outputFile, endpointsFiles, docs).then(() => {
+  import("./server");
 });

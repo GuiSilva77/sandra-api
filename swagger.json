@@ -1,0 +1,774 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Cantina da Sandra",
+    "description": "API para o sistema de pedidos da cantina da Sandra"
+  },
+  "host": "localhost:4000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  },
+  "paths": {
+    "/docs": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/clientes/login": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Endpoint para realizar login de um cliente.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Login do cliente.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Login": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Senha": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "required": [
+                "Login",
+                "Senha"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cliente": {
+                  "type": "object",
+                  "properties": {
+                    "Id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "Nome": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "Login": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "Senha": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "Ativado": {
+                      "type": "string",
+                      "example": "boolean"
+                    },
+                    "CPF": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  }
+                },
+                "token": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Login ou senha inválidos."
+          }
+        }
+      }
+    },
+    "/clientes/logout": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Endpoint para realizar logout de um cliente.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logout realizado com sucesso."
+          }
+        }
+      }
+    },
+    "/clientes/cadastrar": {
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Endpoint para cadastrar um cliente.",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Dados do cliente.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Nome": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Login": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Senha": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "CPF": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "required": [
+                "Nome",
+                "Login",
+                "Senha",
+                "CPF"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente cadastrado com sucesso."
+          },
+          "500": {
+            "description": "Erro ao cadastrar o cliente."
+          }
+        }
+      }
+    },
+    "/clientes/desativar/{id}": {
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Endpoint para desativar um cliente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente desativado com sucesso."
+          },
+          "404": {
+            "description": "Cliente não encontrado."
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/pedidos/": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Endpoint para obter todos os pedidos.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "Valor": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "Data": {
+                    "type": "string",
+                    "example": "Date"
+                  },
+                  "MetPag": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "ClienteId": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "ProdutosPedidos": {
+                    "type": "string",
+                    "example": "Produto[]"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Pedido não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/{id}": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Endpoint para obter um pedido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do pedido"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Data": {
+                  "type": "string",
+                  "example": "Date"
+                },
+                "MetPag": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "ClienteId": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "ProdutosPedidos": {
+                  "type": "string",
+                  "example": "Produto[]"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Pedido não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/pedidos/adicionar": {
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Endpoint para adicionar um pedido.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          },
+          {
+            "name": "pedido",
+            "in": "body",
+            "description": "Pedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "MetPag": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "ProdutosPedidos": {
+                  "type": "string",
+                  "example": "Produto[]"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido adicionado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Data": {
+                  "type": "string",
+                  "example": "Date"
+                },
+                "MetPag": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "ClienteId": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "ProdutosPedidos": {
+                  "type": "string",
+                  "example": "Produto[]"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao adicionar pedido"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/produtos/": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Endpoint para obter todos os produtos.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "Nome": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "Valor": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "Descricao": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "URLImagem": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/produtos/{id}": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Endpoint para obter um produto.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Nome": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Descricao": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "URLImagem": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          }
+        }
+      }
+    },
+    "/produtos/adicionar": {
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Endpoint para adicionar um produto.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          },
+          {
+            "name": "produto",
+            "in": "body",
+            "description": "Produto a ser adicionado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Nome": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Descricao": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "URLImagem": {
+                  "type": "string",
+                  "example": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto adicionado"
+          },
+          "400": {
+            "description": "Erro ao adicionar produto"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/produtos/atualizar/{id}": {
+      "put": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Endpoint para atualizar um produto.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do produto"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          },
+          {
+            "name": "produto",
+            "in": "body",
+            "description": "Produto a ser atualizado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Nome": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Descricao": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "URLImagem": {
+                  "type": "string",
+                  "example": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto atualizado"
+          },
+          "400": {
+            "description": "Erro ao atualizar produto"
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/produtos/deletar/{id}": {
+      "delete": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Endpoint para deletar um produto.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do produto"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto deletado"
+          },
+          "500": {
+            "description": "Erro ao deletar produto"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Cliente": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "example": "number"
+        },
+        "Nome": {
+          "type": "string",
+          "example": "string"
+        },
+        "Login": {
+          "type": "string",
+          "example": "string"
+        },
+        "Senha": {
+          "type": "string",
+          "example": "string"
+        },
+        "Ativado": {
+          "type": "string",
+          "example": "boolean"
+        },
+        "CPF": {
+          "type": "string",
+          "example": "string"
+        }
+      }
+    },
+    "Produto": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "example": "number"
+        },
+        "Nome": {
+          "type": "string",
+          "example": "string"
+        },
+        "Descricao": {
+          "type": "string",
+          "example": "string"
+        },
+        "Preco": {
+          "type": "string",
+          "example": "number"
+        },
+        "URLImagem": {
+          "type": "string",
+          "example": "string"
+        }
+      }
+    },
+    "Pedido": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "example": "number"
+        },
+        "Valor": {
+          "type": "string",
+          "example": "number"
+        },
+        "Data": {
+          "type": "string",
+          "example": "Date"
+        },
+        "MetPag": {
+          "type": "string",
+          "example": "string"
+        },
+        "ClienteId": {
+          "type": "string",
+          "example": "number"
+        },
+        "ProdutosPedidos": {
+          "type": "string",
+          "example": "Produto[]"
+        }
+      }
+    }
+  }
+}

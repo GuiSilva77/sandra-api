@@ -2,5 +2,6 @@
   "execMap": {
     "js": "node",
     "ts": "ts-node"
-  }
+  },
+  "ignore": ["node_modules", "dist", "./swagger.json"]
 }

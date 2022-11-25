@@ -12,6 +12,8 @@ model Clientes {
   Nome    String    @db.VarChar(80)
   Login   String    @db.VarChar(50)
   Senha   String    @db.VarChar(50)
+  Ativado Boolean?
+  CPF     String?   @db.VarChar(11)
   Pedidos Pedidos[]
 }
 

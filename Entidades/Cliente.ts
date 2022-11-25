@@ -5,5 +5,7 @@ export class Cliente {
   public Nome?: string;
   public Login?: string;
   public Senha?: string;
+  public CPF?: string | null;
+  public Ativado?: boolean | null;
   public Pedidos?: Pedido[];
 }
