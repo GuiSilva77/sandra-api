@@ -15,7 +15,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbiI6IlNBTkRSQ
 
 ###
 
-GET http://localhost:4002/clientes/login HTTP/1.1
+GET https://sandrapi.azurewebsites.net/clientes/login HTTP/1.1
 Content-Type: application/json
 
 {
