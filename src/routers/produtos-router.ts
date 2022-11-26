@@ -2,7 +2,7 @@ import Express from "express";
 import { PrismaClient } from "@prisma/client";
 import { Produto } from "../../Entidades/Produto";
 import checarAutorizacao from "../autorizacao";
-import Jwt from "jsonwebtoken";
+import Jwt, { JwtPayload } from "jsonwebtoken";
 
 const produtosRouter = Express.Router();
 const db = new PrismaClient();
@@ -87,6 +87,7 @@ produtosRouter.post("/adicionar", async (req, res) => {
               Valor: "number",
               Descricao: "string",
               URLImagem: "string",
+              Categoria: "string"
             }
     }
     #swagger.responses[200] = {
@@ -97,19 +98,25 @@ produtosRouter.post("/adicionar", async (req, res) => {
     }
 */
 
-  checarAutorizacao(req, res, async () => {
-    const { Nome, Preco, Descricao, URLImagem } = req.body;
+  checarAutorizacao(req, res, async (decoded) => {
+    if (decoded.Id != "Sandra") {
+      res.status(404).send();
+      return;
+    }
+
+    const { Nome, Preco, Descricao, URLImagem, Categoria } = req.body;
     const produto: Produto | null = await db.produtos.create({
       data: {
         Nome,
         Preco,
         Descricao,
         URLImagem,
+        Categoria,
       },
     });
 
     if (produto) {
-      res.status(200);
+      res.status(200).send();
     } else {
       res.status(400).json({ message: "Erro ao cadastrar produto" });
     }
@@ -142,6 +149,7 @@ produtosRouter.put("/atualizar/:id", async (req, res) => {
               Valor: "number",
               Descricao: "string",
               URLImagem: "string",
+              Categoria: "string"
             }
     }
     #swagger.responses[200] = {
@@ -154,9 +162,14 @@ produtosRouter.put("/atualizar/:id", async (req, res) => {
         description: 'Produto não encontrado'
     }
 */
-  checarAutorizacao(req, res, async () => {
+  checarAutorizacao(req, res, async (decoded) => {
+    if (decoded.Id != "Sandra") {
+      res.status(404).send();
+      return;
+    }
+
     const { id } = req.params;
-    const { Nome, Preco, Descricao, URLImagem } = req.body;
+    const { Nome, Preco, Descricao, URLImagem, Categoria } = req.body;
     const produto: Produto | null = await db.produtos.update({
       where: {
         Id: Number(id),
@@ -166,6 +179,7 @@ produtosRouter.put("/atualizar/:id", async (req, res) => {
         Preco,
         Descricao,
         URLImagem,
+        Categoria,
       },
     });
 
@@ -202,7 +216,12 @@ produtosRouter.delete("/deletar/:id", async (req, res) => {
         description: 'Erro ao deletar produto'
     }
 */
-  checarAutorizacao(req, res, async () => {
+  checarAutorizacao(req, res, async (decoded) => {
+    if (decoded.Id != "Sandra") {
+      res.status(404).send();
+      return;
+    }
+
     const { id } = req.params;
     const produto: Produto | null = await db.produtos.delete({
       where: {
@@ -211,7 +230,7 @@ produtosRouter.delete("/deletar/:id", async (req, res) => {
     });
 
     if (produto) {
-      res.status(200);
+      res.status(200).send();
     } else {
       res.status(500).json({ message: "Erro ao deletar produto" });
     }

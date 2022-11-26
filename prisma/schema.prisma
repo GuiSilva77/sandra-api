@@ -23,6 +23,7 @@ model Pedidos {
   Data            DateTime         @db.Date
   MetPag          String           @db.VarChar(30)
   ClienteId       Int
+  Status          String?          @db.VarChar(20)
   Clientes        Clientes         @relation(fields: [ClienteId], references: [Id], onUpdate: NoAction, map: "FK_ClienteId")
   ProdutosPedidos ProdutosPedidos?
 }
@@ -33,6 +34,7 @@ model Produtos {
   Preco           Float             @db.Money
   Descricao       String?           @db.Text
   URLImagem       String?           @db.Text
+  Categoria       String?           @default("", map: "DF__Produtos__Catego__6E01572D") @db.VarChar(50)
   ProdutosPedidos ProdutosPedidos[]
 }
 

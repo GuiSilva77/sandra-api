@@ -338,6 +338,97 @@
             "bearerAuth": []
           }
         ]
+      },
+      "put": {
+        "tags": [
+          "Pedidos"
+        ],
+        "description": "Endpoint para atualizar um pedido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number",
+            "description": "Id do pedido"
+          },
+          {
+            "name": "token",
+            "in": "header",
+            "description": "Token de autenticação",
+            "type": "string"
+          },
+          {
+            "name": "pedido",
+            "in": "body",
+            "description": "Pedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "MetPag": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "ProdutosPedidos": {
+                  "type": "string",
+                  "example": "Produto[]"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido atualizado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Data": {
+                  "type": "string",
+                  "example": "Date"
+                },
+                "MetPag": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "ClienteId": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "ProdutosPedidos": {
+                  "type": "string",
+                  "example": "Produto[]"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Pedido não encontrado"
+          },
+          "500": {
+            "description": "Erro ao atualizar pedido"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/pedidos/adicionar": {
@@ -561,6 +652,10 @@
                 "URLImagem": {
                   "type": "string",
                   "example": "string"
+                },
+                "Categoria": {
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }
@@ -572,6 +667,9 @@
           },
           "400": {
             "description": "Erro ao adicionar produto"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "security": [
@@ -621,6 +719,10 @@
                   "example": "string"
                 },
                 "URLImagem": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Categoria": {
                   "type": "string",
                   "example": "string"
                 }
@@ -673,6 +775,9 @@
         "responses": {
           "200": {
             "description": "Produto deletado"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Erro ao deletar produto"

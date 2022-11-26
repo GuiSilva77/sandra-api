@@ -1,9 +1,25 @@
-GET http://localhost:4000/produtos/adicionar HTTP/1.1
+POST http://localhost:4002/produtos/adicionar HTTP/1.1
+Authorization: Bearer 3fd52gf13h8fhg3f5h68
+
+{
+    "Nome": "Produto 1",
+    "Preco": 10.00,
+    "Descricao": "Descrição do produto 1",
+    "Categoria": "Categoria 1",
+    "URLImagem": "https://www.google.com.br"
+}
+
+###
+GET  http://localhost:4002/produtos HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbiI6IlNBTkRSQSIsIlNlbmhhIjoiMTIzNDU2IiwiSWQiOiJTYW5kcmEiLCJpYXQiOjE2Njk0NzY3OTB9.6VP-azMTgDgwZIjXiE_U-RBdUSV0VwUoXsnPCIFPEkQ
+
+###
+
+GET http://localhost:4002/clientes/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "Nome": "Refrigerante",
-    "Preco": 5.00,
-    "Descricao": "Refrigerante de Cola",
-    "URLImagem": ""
+    "Login": "SANDRA",
+    "Senha": "123456"
 }
+

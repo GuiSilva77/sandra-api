@@ -4,4 +4,5 @@ export class Produto {
   public Preco?: number;
   public Descricao?: String | null;
   public URLImagem?: String | null;
+  public Categoria?: string | null;
 }

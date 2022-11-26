@@ -40,6 +40,16 @@ clientesRouter.get("/login", async (req, res) => {
     }
   */
   const { Login, Senha } = req.body;
+
+  if (Login == process.env.ADMIN_LOGIN && Senha == process.env.ADMIN_PASSWORD) {
+    const token = Jwt.sign(
+      { Login, Senha, Id: "Sandra" },
+      process.env.TOKEN as string
+    );
+    res.status(200).json({ token });
+    return;
+  }
+
   const cliente: Cliente | null = await db.clientes.findFirst({
     where: {
       Login,
@@ -106,7 +116,7 @@ clientesRouter.post("/cadastrar", async (req, res) => {
   });
 
   if (cliente) {
-    res.status(200);
+    res.status(200).send();
   } else {
     res.status(500).json({ message: "Erro ao cadastrar cliente" });
   }
@@ -145,7 +155,7 @@ clientesRouter.delete("/desativar/:id", async (req, res) => {
     });
 
     if (cliente) {
-      res.status(200);
+      res.status(200).send();
     } else {
       res.status(404).json({ message: "Cliente não encontrado" });
     }
