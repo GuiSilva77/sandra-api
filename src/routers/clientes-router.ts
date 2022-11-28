@@ -8,7 +8,7 @@ const db = new PrismaClient();
 const clientesRouter = Express.Router();
 
 // GET /clientes/login
-clientesRouter.get("/login", async (req, res) => {
+clientesRouter.post("/login", async (req, res) => {
   /*
     #swagger.tags = ['Clientes']
     #swagger.description = 'Endpoint para realizar login de um cliente.'
@@ -67,6 +67,48 @@ clientesRouter.get("/login", async (req, res) => {
   } else {
     res.status(404).json({ message: "Cliente não encontrado" });
   }
+});
+
+// GET /clientes/:id (somente SANDRA)
+clientesRouter.get("/:id", async (req, res) => {
+  /*
+    #swagger.tags = ['Clientes']
+    #swagger.description = 'Endpoint para obter um cliente.'
+    #swagger.parameters['id'] = { description: 'Id do cliente.' }
+    #swagger.responses[200] = {
+      description: 'Cliente encontrado.',
+      schema: {
+        Id: "number",
+        Nome: "string",
+        Login: "string",
+        Senha: "string",
+        Ativado: "boolean",
+        CPF: "string",
+      }
+    }
+    #swagger.responses[404] = {
+      description: 'Cliente não encontrado.'
+    }
+  */
+  checarAutorizacao(req, res, async (decoded) => {
+    if (decoded.Id != "Sandra") {
+      res.status(401).json({ message: "Acesso não autorizado" });
+      return;
+    }
+    const id = req.params.id;
+
+    const cliente: Cliente | null = await db.clientes.findUnique({
+      where: {
+        Id: Number(id),
+      },
+    });
+
+    if (cliente) {
+      res.status(200).json(cliente);
+    } else {
+      res.status(404).json({ message: "Cliente não encontrado" });
+    }
+  });
 });
 
 // GET /clientes/logout

@@ -11,7 +11,7 @@ const db = new PrismaClient();
 pedidosRouter.get("/", async (req, res) => {
   /*
     #swagger.tags = ['Pedidos']
-    #swagger.description = 'Endpoint para obter todos os pedidos.'
+    #swagger.description = 'Endpoint para obter todos os pedidos de um cliente.'
     #swagger.security = [{
             "bearerAuth": []
     }]
@@ -29,7 +29,31 @@ pedidosRouter.get("/", async (req, res) => {
               Data: "Date",
               MetPag: "string",
               ClienteId: "number",
-              ProdutosPedidos: "Produto[]",
+              Clientes: {
+                Id: "number",
+                Nome: "string",
+                Login: "string",
+                Senha: "string",
+                Ativado: "boolean",
+                CPF: "string",
+              },
+              ProdutosPedidos: [
+                {
+                  Id: "number",
+                  ProdutoId: "number",
+                  PedidoId: "number",
+                  Quantidade: "number",
+                  Produtos: {
+                    Id: "number",
+                    Nome: "string",
+                    Descricao: "string",
+                    Preco: "number",
+                    Categoria: "string",
+                    URLImagem: "string",
+                    Descricao: "string"
+                  }
+                }
+              ]
             }
         ]
     }
@@ -37,10 +61,32 @@ pedidosRouter.get("/", async (req, res) => {
         description: 'Pedido não encontrado'
     }
   */
-  checarAutorizacao(req, res, async () => {
+  checarAutorizacao(req, res, async (decoded) => {
+    if (decoded.Id == "Sandra") {
+      const pedidos = await db.pedidos.findMany({
+        include: {
+          Clientes: {},
+          ProdutosPedidos: {
+            include: {
+              Produtos: {},
+            },
+          },
+        },
+      });
+      res.status(200).json(pedidos);
+      return;
+    }
     const pedidos = await db.pedidos.findMany({
+      where: {
+        ClienteId: decoded.Id,
+      },
       include: {
-        ProdutosPedidos: {},
+        Clientes: {},
+        ProdutosPedidos: {
+          include: {
+            Produtos: {},
+          },
+        },
       },
     });
 
@@ -73,12 +119,39 @@ pedidosRouter.get("/:id", async (req, res) => {
     #swagger.responses[200] = {
         description: 'Pedido',
         schema: {
-          Id: "number",
-          Valor: "number",
-          Data: "Date",
-          MetPag: "string",
-          ClienteId: "number",
-          ProdutosPedidos: "Produto[]",
+          {
+              Id: "number",
+              Valor: "number",
+              Data: "Date",
+              MetPag: "string",
+              ClienteId: "number",
+              Clientes: {
+                Id: "number",
+                Nome: "string",
+                Login: "string",
+                Senha: "string",
+                Ativado: "boolean",
+                CPF: "string"
+              },
+              ProdutosPedidos: [
+                {
+                  Id: "number",
+                  ProdutoId: "number",
+                  PedidoId: "number",
+                  Quantidade: "number",
+                  Produtos: {
+                    Id: "number",
+                    Nome: "string",
+                    Descricao: "string",
+                    Preco: "number",
+                    Categoria: "string",
+                    URLImagem: "string",
+                    Descricao: "string"
+                  }
+                }
+              ]
+            }
+          }
         }
     }
     #swagger.responses[404] = {
@@ -92,7 +165,12 @@ pedidosRouter.get("/:id", async (req, res) => {
         Id: Number(id),
       },
       include: {
-        ProdutosPedidos: {},
+        Clientes: {},
+        ProdutosPedidos: {
+          include: {
+            Produtos: {},
+          },
+        },
       },
     });
 
@@ -155,6 +233,7 @@ pedidosRouter.post("/adicionar", async (req, res) => {
         Data: new Date(),
         MetPag,
         ClienteId: clienteId,
+        Status: "Aguardando",
       },
     });
 
@@ -219,35 +298,27 @@ pedidosRouter.put("/:id", async (req, res) => {
         description: 'Erro ao atualizar pedido'
     }
   */
-  checarAutorizacao(req, res, async () => {
+  checarAutorizacao(req, res, async (decoded) => {
+    if (decoded.Id != "Sandra") {
+      res
+        .status(401)
+        .json({ message: "Você não tem permissão para acessar este recurso" });
+      return;
+    }
+
     const { id } = req.params;
-    const { Valor, MetPag, ProdutosPedidos } = req.body;
+    const { Status } = req.body;
 
     const pedido: Pedidos | null = await db.pedidos.update({
       where: {
         Id: Number(id),
       },
       data: {
-        Valor,
-        MetPag,
+        Status,
       },
     });
 
-    const produtosPedidos = await db.produtosPedidos.deleteMany({
-      where: {
-        PedId: Number(id),
-      },
-    });
-
-    const produtosPedidosNovos = await db.produtosPedidos.createMany({
-      data: ProdutosPedidos.map((produtoPedido: ProdutosPedidos) => ({
-        ProdId: produtoPedido.ProdId,
-        PedId: Number(id),
-        Quantidade: produtoPedido.Quantidade,
-      })),
-    });
-
-    if (pedido && produtosPedidos && produtosPedidosNovos) {
+    if (pedido) {
       res.status(200).json(pedido);
     } else {
       res.status(500).json({ message: "Erro ao atualizar pedido" });

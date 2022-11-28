@@ -18,14 +18,14 @@ model Clientes {
 }
 
 model Pedidos {
-  Id              Int              @id(map: "PK__Pedidos__3214EC07A364EF57") @default(autoincrement())
-  Valor           Float            @db.Money
-  Data            DateTime         @db.Date
-  MetPag          String           @db.VarChar(30)
+  Id              Int               @id(map: "PK__Pedidos__3214EC07A364EF57") @default(autoincrement())
+  Valor           Float             @db.Money
+  Data            DateTime          @db.Date
+  MetPag          String            @db.VarChar(30)
   ClienteId       Int
-  Status          String?          @db.VarChar(20)
-  Clientes        Clientes         @relation(fields: [ClienteId], references: [Id], onUpdate: NoAction, map: "FK_ClienteId")
-  ProdutosPedidos ProdutosPedidos?
+  Status          String?           @db.VarChar(20)
+  Clientes        Clientes          @relation(fields: [ClienteId], references: [Id], onUpdate: NoAction, map: "FK_ClienteId")
+  ProdutosPedidos ProdutosPedidos[]
 }
 
 model Produtos {
@@ -39,9 +39,10 @@ model Produtos {
 }
 
 model ProdutosPedidos {
-  PedId      Int      @id(map: "PK__Produtos__50CF4A45C3EB763B")
+  PedId      Int
   ProdId     Int
   Quantidade Int
-  Pedidos    Pedidos  @relation(fields: [PedId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK__ProdutosP__PedId__6383C8BA")
-  Produtos   Produtos @relation(fields: [ProdId], references: [Id], onUpdate: NoAction, map: "FK_ProdId")
+  Id         Int      @id(map: "PK__Produtos__3214EC07372740E7") @default(autoincrement())
+  Pedidos    Pedidos  @relation(fields: [PedId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK__ProdutosP__PedId__02084FDA")
+  Produtos   Produtos @relation(fields: [ProdId], references: [Id], onUpdate: NoAction, map: "FK__ProdutosP__ProdI__02FC7413")
 }

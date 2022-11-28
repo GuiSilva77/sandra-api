@@ -8,5 +8,6 @@ export class Pedido {
   public MetPag?: string;
   public ClienteId?: number;
   public Cliente?: Cliente;
+  public Status?: string | null;
   public ProdutosPedidos?: Produto[];
 }

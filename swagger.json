@@ -26,7 +26,7 @@
       }
     },
     "/clientes/login": {
-      "get": {
+      "post": {
         "tags": [
           "Clientes"
         ],
@@ -103,6 +103,66 @@
           },
           "404": {
             "description": "Login ou senha inválidos."
+          }
+        }
+      }
+    },
+    "/clientes/{id}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "description": "Endpoint para obter um cliente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Id do cliente."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente encontrado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Nome": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Login": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Senha": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "Ativado": {
+                  "type": "string",
+                  "example": "boolean"
+                },
+                "CPF": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Cliente não encontrado."
           }
         }
       }
@@ -213,7 +273,7 @@
         "tags": [
           "Pedidos"
         ],
-        "description": "Endpoint para obter todos os pedidos.",
+        "description": "Endpoint para obter todos os pedidos de um cliente.",
         "parameters": [
           {
             "name": "token",
@@ -250,9 +310,87 @@
                     "type": "string",
                     "example": "number"
                   },
+                  "Clientes": {
+                    "type": "object",
+                    "properties": {
+                      "Id": {
+                        "type": "string",
+                        "example": "number"
+                      },
+                      "Nome": {
+                        "type": "string",
+                        "example": "string"
+                      },
+                      "Login": {
+                        "type": "string",
+                        "example": "string"
+                      },
+                      "Senha": {
+                        "type": "string",
+                        "example": "string"
+                      },
+                      "Ativado": {
+                        "type": "string",
+                        "example": "boolean"
+                      },
+                      "CPF": {
+                        "type": "string",
+                        "example": "string"
+                      }
+                    }
+                  },
                   "ProdutosPedidos": {
-                    "type": "string",
-                    "example": "Produto[]"
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "Id": {
+                          "type": "string",
+                          "example": "number"
+                        },
+                        "ProdutoId": {
+                          "type": "string",
+                          "example": "number"
+                        },
+                        "PedidoId": {
+                          "type": "string",
+                          "example": "number"
+                        },
+                        "Quantidade": {
+                          "type": "string",
+                          "example": "number"
+                        },
+                        "Produtos": {
+                          "type": "object",
+                          "properties": {
+                            "Id": {
+                              "type": "string",
+                              "example": "number"
+                            },
+                            "Nome": {
+                              "type": "string",
+                              "example": "string"
+                            },
+                            "Descricao": {
+                              "type": "string",
+                              "example": "string"
+                            },
+                            "Preco": {
+                              "type": "string",
+                              "example": "number"
+                            },
+                            "Categoria": {
+                              "type": "string",
+                              "example": "string"
+                            },
+                            "URLImagem": {
+                              "type": "string",
+                              "example": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               },
@@ -295,42 +433,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Pedido",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "Id": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "Valor": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "Data": {
-                  "type": "string",
-                  "example": "Date"
-                },
-                "MetPag": {
-                  "type": "string",
-                  "example": "string"
-                },
-                "ClienteId": {
-                  "type": "string",
-                  "example": "number"
-                },
-                "ProdutosPedidos": {
-                  "type": "string",
-                  "example": "Produto[]"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
+            "description": "OK"
           },
           "404": {
-            "description": "Pedido não encontrado"
+            "description": "Not Found"
           }
         },
         "security": [
@@ -416,6 +522,9 @@
                 "name": "main"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Pedido não encontrado"

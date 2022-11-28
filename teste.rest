@@ -10,12 +10,17 @@ Authorization: Bearer 3fd52gf13h8fhg3f5h68
 }
 
 ###
-GET  http://localhost:4002/produtos HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbiI6IlNBTkRSQSIsIlNlbmhhIjoiMTIzNDU2IiwiSWQiOiJTYW5kcmEiLCJpYXQiOjE2Njk0NzY3OTB9.6VP-azMTgDgwZIjXiE_U-RBdUSV0VwUoXsnPCIFPEkQ
+PUT   http://localhost:4002/pedidos/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbiI6IlNBTkRSQSIsIlNlbmhhIjoiMTIzNDU2IiwiSWQiOiJTYW5kcmEiLCJpYXQiOjE2Njk1OTgyNjN9.yrktk44loTUisJrywfmbmieYoifK6LzQ7nChLAwqc04
+Content-Type: application/json
+
+{
+    "Status": "Aguardando"
+}
 
 ###
 
-GET https://sandrapi.azurewebsites.net/clientes/login HTTP/1.1
+POST http://localhost:4002/clientes/login HTTP/1.1
 Content-Type: application/json
 
 {
