@@ -12,7 +12,7 @@ clientesRouter.post("/login", async (req, res) => {
   /*
     #swagger.tags = ['Clientes']
     #swagger.description = 'Endpoint para realizar login de um cliente.'
-    #swagger.parameters['obj'] = {
+    #swagger.parameters['login'] = {
       in: 'body',
       description: 'Login do cliente.',
       required: true,
@@ -43,7 +43,7 @@ clientesRouter.post("/login", async (req, res) => {
 
   if (Login == process.env.ADMIN_LOGIN && Senha == process.env.ADMIN_PASSWORD) {
     const token = Jwt.sign(
-      { Login, Senha, Id: "Sandra" },
+      { id: "Sandra" },
       process.env.TOKEN as string
     );
     res.status(200).json({ token });

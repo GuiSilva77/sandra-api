@@ -2,7 +2,6 @@ import Express from "express";
 import { PrismaClient } from "@prisma/client";
 import { Produto } from "../../Entidades/Produto";
 import checarAutorizacao from "../autorizacao";
-import Jwt, { JwtPayload } from "jsonwebtoken";
 
 const produtosRouter = Express.Router();
 const db = new PrismaClient();
@@ -18,7 +17,7 @@ produtosRouter.get("/", async (req, res) => {
             {
               Id: "number",
               Nome: "string",
-              Valor: "number",
+              Preco: "number",
               Descricao: "string",
               URLImagem: "string",
             }
@@ -44,7 +43,7 @@ produtosRouter.get("/:id", async (req, res) => {
         schema: {
           Id: "number",
           Nome: "string",
-          Valor: "number",
+          Preco: "number",
           Descricao: "string",
           URLImagem: "string",
         }
@@ -71,10 +70,7 @@ produtosRouter.post("/adicionar", async (req, res) => {
   /*
     #swagger.tags = ['Produtos']
     #swagger.description = 'Endpoint para adicionar um produto.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'
@@ -84,7 +80,7 @@ produtosRouter.post("/adicionar", async (req, res) => {
             description: 'Produto a ser adicionado',
             schema: {
               Nome: "string",
-              Valor: "number",
+              Preco: "number",
               Descricao: "string",
               URLImagem: "string",
               Categoria: "string"
@@ -128,10 +124,7 @@ produtosRouter.put("/atualizar/:id", async (req, res) => {
   /*
     #swagger.tags = ['Produtos']  
     #swagger.description = 'Endpoint para atualizar um produto.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'
@@ -146,7 +139,7 @@ produtosRouter.put("/atualizar/:id", async (req, res) => {
             description: 'Produto a ser atualizado',
             schema: {
               Nome: "string",
-              Valor: "number",
+              Preco: "number",
               Descricao: "string",
               URLImagem: "string",
               Categoria: "string"
@@ -196,10 +189,7 @@ produtosRouter.delete("/deletar/:id", async (req, res) => {
   /*
     #swagger.tags = ['Produtos']
     #swagger.description = 'Endpoint para deletar um produto.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'

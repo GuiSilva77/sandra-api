@@ -12,10 +12,7 @@ pedidosRouter.get("/", async (req, res) => {
   /*
     #swagger.tags = ['Pedidos']
     #swagger.description = 'Endpoint para obter todos os pedidos de um cliente.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'
@@ -62,7 +59,7 @@ pedidosRouter.get("/", async (req, res) => {
     }
   */
   checarAutorizacao(req, res, async (decoded) => {
-    if (decoded.Id == "Sandra") {
+    if (decoded.id == "Sandra") {
       const pedidos = await db.pedidos.findMany({
         include: {
           Clientes: {},
@@ -78,7 +75,7 @@ pedidosRouter.get("/", async (req, res) => {
     }
     const pedidos = await db.pedidos.findMany({
       where: {
-        ClienteId: decoded.Id,
+        ClienteId: decoded.id,
       },
       include: {
         Clientes: {},
@@ -103,10 +100,7 @@ pedidosRouter.get("/:id", async (req, res) => {
   /*
     #swagger.tags = ['Pedidos']
     #swagger.description = 'Endpoint para obter um pedido.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'
@@ -119,7 +113,6 @@ pedidosRouter.get("/:id", async (req, res) => {
     #swagger.responses[200] = {
         description: 'Pedido',
         schema: {
-          {
               Id: "number",
               Valor: "number",
               Data: "Date",
@@ -151,7 +144,6 @@ pedidosRouter.get("/:id", async (req, res) => {
                 }
               ]
             }
-          }
         }
     }
     #swagger.responses[404] = {
@@ -187,10 +179,7 @@ pedidosRouter.post("/adicionar", async (req, res) => {
   /*
     #swagger.tags = ['Pedidos']
     #swagger.description = 'Endpoint para adicionar um pedido.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'
@@ -258,10 +247,7 @@ pedidosRouter.put("/:id", async (req, res) => {
   /*
     #swagger.tags = ['Pedidos']
     #swagger.description = 'Endpoint para atualizar um pedido.'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.parameters['token'] = {
+    #swagger.parameters['Authorization'] = {
             in: 'header',
             description: 'Token de autenticação',
             type: 'string'

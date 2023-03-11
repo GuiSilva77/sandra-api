@@ -33,7 +33,7 @@
         "description": "Endpoint para realizar login de um cliente.",
         "parameters": [
           {
-            "name": "obj",
+            "name": "login",
             "in": "body",
             "description": "Login do cliente.",
             "required": true,
@@ -276,7 +276,7 @@
         "description": "Endpoint para obter todos os pedidos de um cliente.",
         "parameters": [
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -402,12 +402,7 @@
           "404": {
             "description": "Pedido não encontrado"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/pedidos/{id}": {
@@ -425,7 +420,7 @@
             "description": "Id do pedido"
           },
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -433,17 +428,122 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Pedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Valor": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Data": {
+                  "type": "string",
+                  "example": "Date"
+                },
+                "MetPag": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "ClienteId": {
+                  "type": "string",
+                  "example": "number"
+                },
+                "Clientes": {
+                  "type": "object",
+                  "properties": {
+                    "Id": {
+                      "type": "string",
+                      "example": "number"
+                    },
+                    "Nome": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "Login": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "Senha": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "Ativado": {
+                      "type": "string",
+                      "example": "boolean"
+                    },
+                    "CPF": {
+                      "type": "string",
+                      "example": "string"
+                    }
+                  }
+                },
+                "ProdutosPedidos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Id": {
+                        "type": "string",
+                        "example": "number"
+                      },
+                      "ProdutoId": {
+                        "type": "string",
+                        "example": "number"
+                      },
+                      "PedidoId": {
+                        "type": "string",
+                        "example": "number"
+                      },
+                      "Quantidade": {
+                        "type": "string",
+                        "example": "number"
+                      },
+                      "Produtos": {
+                        "type": "object",
+                        "properties": {
+                          "Id": {
+                            "type": "string",
+                            "example": "number"
+                          },
+                          "Nome": {
+                            "type": "string",
+                            "example": "string"
+                          },
+                          "Descricao": {
+                            "type": "string",
+                            "example": "string"
+                          },
+                          "Preco": {
+                            "type": "string",
+                            "example": "number"
+                          },
+                          "Categoria": {
+                            "type": "string",
+                            "example": "string"
+                          },
+                          "URLImagem": {
+                            "type": "string",
+                            "example": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Pedido não encontrado"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       },
       "put": {
         "tags": [
@@ -459,7 +559,7 @@
             "description": "Id do pedido"
           },
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -532,12 +632,7 @@
           "500": {
             "description": "Erro ao atualizar pedido"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/pedidos/adicionar": {
@@ -553,7 +648,7 @@
             "type": "string"
           },
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -620,12 +715,7 @@
           "500": {
             "description": "Erro ao adicionar pedido"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/produtos/": {
@@ -651,7 +741,7 @@
                     "type": "string",
                     "example": "string"
                   },
-                  "Valor": {
+                  "Preco": {
                     "type": "string",
                     "example": "number"
                   },
@@ -702,7 +792,7 @@
                   "type": "string",
                   "example": "string"
                 },
-                "Valor": {
+                "Preco": {
                   "type": "string",
                   "example": "number"
                 },
@@ -734,7 +824,7 @@
         "description": "Endpoint para adicionar um produto.",
         "parameters": [
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -750,7 +840,7 @@
                   "type": "string",
                   "example": "string"
                 },
-                "Valor": {
+                "Preco": {
                   "type": "string",
                   "example": "number"
                 },
@@ -780,12 +870,7 @@
           "404": {
             "description": "Not Found"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/produtos/atualizar/{id}": {
@@ -803,7 +888,7 @@
             "description": "Id do produto"
           },
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -819,7 +904,7 @@
                   "type": "string",
                   "example": "string"
                 },
-                "Valor": {
+                "Preco": {
                   "type": "string",
                   "example": "number"
                 },
@@ -852,12 +937,7 @@
           "500": {
             "description": "Internal Server Error"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/produtos/deletar/{id}": {
@@ -875,7 +955,7 @@
             "description": "Id do produto"
           },
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "description": "Token de autenticação",
             "type": "string"
@@ -891,12 +971,7 @@
           "500": {
             "description": "Erro ao deletar produto"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     }
   },
